@@ -15,7 +15,8 @@ var data = fs.readFileSync('token.txt', 'utf8').split('\r\n');
 var key = data[0], token = data[1];
 
 
-// do stuffs on trello board every 15 min
+// do stuffs on trello board every 5 sec (for now in testing phase) 
+// I suggest not to lower it below 5 sec since it might trigger multiple async calls on top of each other
 setInterval(function () {
     // Update if any videos are ready and update the master checklist
     masterCheckList.Update(key,token);
