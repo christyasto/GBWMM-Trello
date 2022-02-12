@@ -19,3 +19,6 @@ Trello Automation for GBWMM Youth Programme.
 	
 ### **Availability.update** : 
 	TBC
+	
+### **NotifyTelegram.update** : 
+	TBC
