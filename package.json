@@ -1,0 +1,22 @@
+{
+  "name": "gbwmm-trello",
+  "version": "1.0.0",
+  "description": "Extend Trello functions by having a master board that contains features stored in functions folder",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christyasto/GBWMM-Trello.git"
+  },
+  "author": "Chris + Ben",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christyasto/GBWMM-Trello/issues"
+  },
+  "homepage": "https://github.com/christyasto/GBWMM-Trello#readme",
+  "dependencies": {
+    "trello": "^0.11.0"
+  }
+}
