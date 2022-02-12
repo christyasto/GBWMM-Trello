@@ -10,12 +10,12 @@ module.exports = {
         cards.forEach(card => {
           doneUrls.push(card.shortUrl);
         });
-        if (!doneUrls.length) { console.log("Tech Team's [Done] is empty. No update needed."); return; }
+        if (!doneUrls.length) { console.log("[Programme]: Tech Team's [Done] is empty. No update needed."); return; }
         var counter = 0;
         // Programme Masterlist's [In Progress]
         trello.getCardsOnList('62026f24210e8d7b341d9701',
           function (e, mCards) {
-            if(!mCards.length) { console.log("No ongoing work in Programme Masterlist's [In Progress]. No update needed."); return; }
+            if(!mCards.length) { console.log("[Programme]: No ongoing work in Programme Masterlist's [In Progress]. No update needed."); return; }
             mCards.forEach(mCard => {
               trello.getChecklistsOnCard(mCard.id,
                 function (e, cList) {
@@ -39,7 +39,7 @@ module.exports = {
                             console.log(
                               `Response: ${response.status} ${response.statusText}`
                             );
-                            console.log("Master checklist updated!")
+                            console.log("[Programme]: Master checklist updated!")
                             return response.text();
                           })
                           .then(text => console.log(text))
@@ -50,8 +50,8 @@ module.exports = {
                 })
             })
           });
-          if(!counter) { console.log("No matching cards... No updates were done.") }
+          if(!counter) { console.log("[Programme]: No matching cards... No updates were done.") }
       })
-    console.log("Checking Programme Masterlist...");
+    console.log("[Programme]: Checking for Programme updates...");
   }
 }
