@@ -1,5 +1,9 @@
 # GBWMM-Trello
- Trello Automation for GBWMM Youth Programme
+Trello Automation for GBWMM Youth Programme.
+
+#### **Notes:**
+- [Documentation here](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) if you want to create non-standard functions from the Rest API
+- Since most of the functions are async, try to put [source] in your logging for easier debugging. (check one of the functions' log triggers)
 
 ### **MasterChecklist.update** : 
 	- Read if there are any cards in Tech Team's [Done]
