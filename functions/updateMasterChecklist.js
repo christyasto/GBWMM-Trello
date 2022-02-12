@@ -16,7 +16,28 @@ module.exports = {
               trello.getChecklistsOnCard(mCard.id,
                 function (e, cList) {
                   cList.forEach(check => {
-                    console.log(check);
+                    check.checkItems.forEach(checkItems => {
+                      console.log(`${doneUrls.includes(checkItems.name)}\n${doneUrls}\n${checkItems.name}`);
+                      // PUT /1/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}/state
+                      if (doneUrls.includes(checkItems.name)) {
+
+                        const fetch = require('node-fetch');
+                        fetch(`https://api.trello.com/1/cards/${mCard.id}/checklist/${check.id}/checkItem/${checkItems.id}/state?key=${key}&token=${token}&value=true`, {
+                          method: 'PUT',
+                          headers: {
+                            'Accept': 'application/json'
+                          }
+                        })
+                          .then(response => {
+                            console.log(
+                              `Response: ${response.status} ${response.statusText}`
+                            );
+                            return response.text();
+                          })
+                          .then(text => console.log(text))
+                          .catch(err => console.error(err));
+                      }
+                    })
                   })
                 })
             })
