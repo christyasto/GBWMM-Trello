@@ -11,13 +11,12 @@ module.exports = {
       var GMWW_singsboard_id = "61f6563ed7993620ea668677"
       var GMWW_technicalboard_id = "61f2c9505d6e7a72cc0b7ca0"
     
-      console.log(key)
-      console.log(token)
+      console.log(key);
+      console.log(token);
+      trello.getListsOnBoard(GMWW_singsboard_id, 'any' , function (e,lists) {
+         console.log(lists);
+       });
 
-      // var listPromise = trello.getListsOnBoard(GMWW_singsboard_id, (lists) => {
-      //   console.log(lists)
-      // })
-
-      console.log("GMWMM Web-TV Youth Members' Availability updated!")
+      console.log("GMWMM Web-TV Youth Members' Availability updated!");
     }
 }

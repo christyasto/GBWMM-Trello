@@ -24,4 +24,4 @@ setInterval(function () {
     // Check if there are jobs done and move Occupied member to Available n vice versa
     availability.Update(key,token);
 
-}, 10000);
+}, 5000);
