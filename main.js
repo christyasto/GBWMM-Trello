@@ -3,6 +3,7 @@ const masterCheckList = require('./functions/updateMasterChecklist');
 const availability = require('./functions/availability');
 
 var data = fs.readFileSync('token.txt', 'utf8').split('\r\n');
+var org_members = JSON.parse(fs.readFileSync('members.json', 'utf8'));
 
 // Your token.txt is to be put in the same folder as this file
 // dont forget to include it in .gitignore so that people can't see
@@ -22,6 +23,6 @@ setInterval(function () {
     // masterCheckList.Update(key,token);
 
     // Check if there are jobs done and move Occupied member to Available n vice versa
-    availability.Update(key,token);
+    availability.Update( key, token, org_members );
 
-}, 10000);
+}, 5000);
