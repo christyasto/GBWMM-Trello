@@ -24,13 +24,13 @@ module.exports = {
           var is_assigned = false
           // If members no cards, means unassigned 
           if(cards.length == 0 ) {
-            console.log(member.fullName + " is slacking now")
+            console.log("[Availability]: "+member.fullName + " is slacking now")
             // trello.updateCardList(member.statusCardId, members_available_list);
           }
           else {
             // Iterate through each card
             cards.forEach( card => {
-              console.log(`Checking on ${member.fullName} card now`)
+              console.log(`[Availability]: Checking on ${member.fullName} card now`)
               comment_to_make = get_comment_to_add(card);
               // If its still due, add assigned card link to member's status card and move to occupied
               // TODO : Check card is really a tasks
@@ -38,27 +38,27 @@ module.exports = {
                 is_assigned = true
                 // Check if its already on members' status card, if not add comment
                 if(!is_assigned_comment_already_in_status_card(comment_to_make, member.statusCardId, trello)) {
-                  console.log("Adding new comment to status card and moving it over!")
+                  console.log("[Availability]: Adding new comment to status card and moving it over!")
                   // trello.addCommentToCard(member.statusCardId, comment_to_make);
                   // Move card to occupied list
                   // trello.updateCardList(member.statusCardId, members_occupied_list);
                 }
               }
               else {
-                console.log("Card is past due or something ...")
+                console.log("[Availability]: Card is past due or something ...")
               }
             })
 
             // After iterating through all the cards, if member has no card that is outstanding
             if(!is_assigned) {
-              console.log(member.fullName + " is slacking now")
+              console.log("[Availability]: "+member.fullName + " is slacking now")
               // trello.updateCardList(member.statusCardId, members_available_list);
             }
           }
         })
       })
 
-      console.log("GMWMM Web-TV Youth Members' Availability updated!")
+      console.log("[Availability]: GMWMM Web-TV Youth Members' Availability updated!")
     }
 }
 
