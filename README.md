@@ -18,7 +18,9 @@ Trello Automation for GBWMM Youth Programme.
 	- "[Programme]: No matching cards... No updates were done."
 	
 ### **Availability.update** : 
-	TBC
+	- For each member, get the cards the member is on
+	- check if each card is still due, add assigned card link to member's status card and move to [Occupied]
+	- If member has no card that is outstanding, move the status card to [Available]
 	
 ### **NotifyTelegram.update** : 
 	TBC
