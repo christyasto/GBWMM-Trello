@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/christyasto/GBWMM-Trello#readme",
   "dependencies": {
+    "lodash": "^4.17.21",
     "trello": "^0.11.0"
   }
 }
