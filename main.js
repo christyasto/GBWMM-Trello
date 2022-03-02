@@ -1,7 +1,7 @@
 const fs = require('fs')
 const masterCheckList = require('./functions/updateMasterChecklist');
 const availability = require('./functions/availability');
-const notifyTelegram = require('./functions/notifyTelegram');
+// const notifyTelegram = require('./functions/notifyTelegram');
 
 var data = fs.readFileSync('token.txt', 'utf8').split('\r\n');
 var org_members = JSON.parse(fs.readFileSync('members.json', 'utf8'));
