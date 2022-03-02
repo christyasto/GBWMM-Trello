@@ -21,11 +21,11 @@ var key = data[0], token = data[1];
 // I suggest not to lower it below 5 sec since it might trigger multiple async calls on top of each other
 setInterval(function () {
   // Update if any videos are ready and update the master checklist
-  // masterCheckList.Update(key, token);
+  masterCheckList.Update(key, token);
 
   // Check if there are jobs done and move Occupied member to Available n vice versa
   // for members that have a new task
-  // availability.Update(key, token, org_members);
+  availability.Update(key, token, org_members);
 
   // Check for happenings and update relevant parties through telegram
   // notifyTelegram.Update(key, token, org_members);
