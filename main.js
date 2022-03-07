@@ -25,7 +25,7 @@ setInterval(function () {
 
   // Check if there are jobs done and move Occupied member to Available n vice versa
   // for members that have a new task
-  availability.Update(key, token, org_members);
+  // availability.Update(key, token, org_members);
 
   // Check for happenings and update relevant parties through telegram
   // notifyTelegram.Update(key, token, org_members);
