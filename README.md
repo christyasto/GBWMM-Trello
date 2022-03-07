@@ -9,6 +9,7 @@ Trello Automation for GBWMM Youth Programme.
 	- Read if there are any cards in Tech Team's [Done]
 	- Find the CheckItem in Programme Masterlist's [In Progress] with the hyperlink to that card 
 	- Gives it a tick.
+	- Also find Intro/Outro attachment in those cards and tick accordingly
 	
 	Log triggers:
 	- "[Programme]: Checking for Programme updates..."
@@ -16,6 +17,7 @@ Trello Automation for GBWMM Youth Programme.
 	- "[Programme]: Tech Team's [Done] is empty. No update needed."
 	- "[Programme]: No ongoing work in Programme Masterlist's [In Progress]. No update needed."
 	- "[Programme]: No matching cards... No updates were done."
+	- "[Programme]: No new Intro/Outro attachments detected... No updates were done."
 	
 ### **Availability.update** : 
 	- For each member, get the cards the member is on
@@ -23,4 +25,4 @@ Trello Automation for GBWMM Youth Programme.
 	- If member has no card that is outstanding, move the status card to [Available]
 	
 ### **NotifyTelegram.update** : 
-	TBC
+	Deprecated until we find good enough reason  to do lol
