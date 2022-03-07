@@ -11,7 +11,7 @@ Trello Automation for GBWMM Youth Programme.
 	- Gives it a tick.
 	- Also find Intro/Outro attachment in those cards and tick accordingly
 	
-	Log triggers:
+	Log triggers in cyan:
 	- "[Programme]: Checking for Programme updates..."
 	- "[Programme]: Master checklist updated!"
 	- "[Programme]: Tech Team's [Done] is empty. No update needed."
@@ -23,6 +23,15 @@ Trello Automation for GBWMM Youth Programme.
 	- For each member, get the cards the member is on
 	- check if each card is still due, add assigned card link to member's status card and move to [Occupied]
 	- If member has no card that is outstanding, move the status card to [Available]
+	
+	Log triggers in blue:
+	- "[Availability]: Checking on ${member.fullName} card now"
+	- "[Availability]: Adding new comment to status card and moving it over!"
+	- "[Availability]: Comment already exist, skipping commenting"
+	- "[Availability]: Card is past due or something ..."
+	- "[Availability]: Moving " + member.fullName + " to available list"
+	- "[Availability]: " + member.fullName + " is slacking now"
+	- "[Availability]: GMWMM Web-TV Youth Members' Availability updated!"
 	
 ### **NotifyTelegram.update** : 
 	Deprecated until we find good enough reason to do lol
