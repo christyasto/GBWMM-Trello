@@ -25,4 +25,4 @@ Trello Automation for GBWMM Youth Programme.
 	- If member has no card that is outstanding, move the status card to [Available]
 	
 ### **NotifyTelegram.update** : 
-	Deprecated until we find good enough reason  to do lol
+	Deprecated until we find good enough reason to do lol
