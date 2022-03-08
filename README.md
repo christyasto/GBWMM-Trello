@@ -33,5 +33,18 @@ Trello Automation for GBWMM Youth Programme.
 	- "[Availability]: " + member.fullName + " is slacking now"
 	- "[Availability]: GMWMM Web-TV Youth Members' Availability updated!"
 	
+### **CardDuplication.update** : 
+	- Check Singspiration team's [Send to Editing Team] and Sermon Team's [Video Editing / Filming]
+	- Copy newly added cards to Tech Team's [To Do]
+	
+	Log triggers in yellow:
+	- "[Duplication]: Nothing found in Song Team's [Send to Editing Team]. No checking needed."
+	- "[Duplication]: No new cards found in Song Team's [Send to Editing Team]. No duplications needed."
+	- "[Duplication]: Nothing found in Sermon Team's [Video Editing / Filming]. No checking needed."
+	- "[Duplication]: No new cards found in Sermon Team's [Video Editing / Filming]. No duplications needed."
+	- "[Duplication]: "${_card.name}" card duplicated from ${_team}'s Board!"
+	- "[Duplication]: New duplicated card "${_card.name}": ${stringified card}"
+	- "[Duplication]: Updated original card "${_card.name}"'s desc: ${new card description}`"
+	
 ### **NotifyTelegram.update** : 
 	Deprecated until we find good enough reason to do lol
