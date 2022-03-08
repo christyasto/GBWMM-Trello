@@ -1,7 +1,7 @@
 const fs = require('fs')
 const masterCheckList = require('./functions/updateMasterChecklist');
 const availability = require('./functions/availability');
-// const notifyTelegram = require('./functions/notifyTelegram');
+const cardDuplication = require('./functions/cardDuplication');
 
 var data = fs.readFileSync('token.txt', 'utf8').split('\r\n');
 var org_members = JSON.parse(fs.readFileSync('members.json', 'utf8'));
@@ -21,12 +21,12 @@ var key = data[0], token = data[1];
 // I suggest not to lower it below 5 sec since it might trigger multiple async calls on top of each other
 setInterval(function () {
   // Update if any videos are ready and update the master checklist
-  masterCheckList.Update(key, token);
+  // masterCheckList.Update(key, token);
 
   // Check if there are jobs done and move Occupied member to Available n vice versa
   // for members that have a new task
   // availability.Update(key, token, org_members);
 
-  // Check for happenings and update relevant parties through telegram
-  // notifyTelegram.Update(key, token, org_members);
-}, 10000);
+  // Check for Singspiration/Sermon Team's milestone and duplicate the card to Tech Team and keep them updated.
+  cardDuplication.Update(key, token, org_members);
+}, 5000);
