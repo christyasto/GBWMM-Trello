@@ -4,7 +4,7 @@ var secrets = JSON.parse(fs.readFileSync('secrets.json', 'utf8'));
 
 // replace the value below with the Telegram token you receive from @BotFather
 const token = secrets.tele_bot_api_key;
-const auth_users = secrets.auth_users
+let auth_users_chat_id = secrets.auth_users_chat_id
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
@@ -21,9 +21,10 @@ bot.onText(/\/register/, (msg, match) => {
     "What is the password to be authenticated?",
     { reply_markup: JSON.stringify({ force_reply: true }) }
   ).then(sentMessage => {
+    console.log(sentMessage)
     bot.onReplyToMessage(sentMessage.chat.id, sentMessage.message_id, reply => {
       if (reply.text === secrets.auth_password) {
-        bot.sendMessage(sentMessage.chat.id, 'You are added to the authenticated list!')
+        add_user_to_auth_list(sentMessage)
       } else {
         bot.sendMessage(sentMessage.chat.id, 'Incorrect password!')
       }
@@ -56,3 +57,13 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 //   // send a message to the chat acknowledging receipt of their message
 //   bot.sendMessage(chatId, 'Received your message');
 // });
+
+function add_user_to_auth_list(message_info) {
+  if (Object.values(auth_users_chat_id).includes(message_info.chat.id)) {
+    bot.sendMessage(message_info.chat.id, 'You are already authenticated.')
+  } else {
+    secrets.auth_users_chat_id[message_info.chat.username] = message_info.chat.id
+    fs.writeFileSync('secrets.json', secrets)
+    bot.sendMessage(message_info.chat.id, `Added you to the authenticated chat list`)
+  }
+}
