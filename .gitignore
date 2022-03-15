@@ -4,3 +4,4 @@ node_modules
 token.txt
 members.json
 api-return/*
+secrets.json
