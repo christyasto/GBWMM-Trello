@@ -9,7 +9,7 @@ module.exports = {
     var doneUrls = [];
     // doneUrls contain the list of short Url from Tech Team's [Done]
     console.log('\x1b[36m%s\x1b[0m', "[Programme]: Checking for Programme updates...");
-    doneListPromise.forEach(async function (card) {
+    for (var card of doneListPromise) {
       var attachments = {};
       doneUrls.push(card.shortUrl);
       // check for attachments in the card if they contain intro / outro
@@ -17,7 +17,7 @@ module.exports = {
       attachments[card.shortUrl] = attachPromise;
       // console.log(JSON.stringify(attachments, null, 4));
       checkIntroNOutro(trello, key, token, attachments, card.name);
-    });
+    };
     checkSermonNsingspiration(trello, key, token, doneUrls);
     setTimeout(() => console.log('\x1b[36m%s\x1b[0m', "[Programme]: Checking done... Changes made are before this line.")
       , 8 * 1000);
@@ -50,15 +50,15 @@ async function checkSermonNsingspiration(_trello, _key, _token, _doneUrls) {
   // Programme Masterlist's [In Progress]
   var MasterListPromise = await _trello.getCardsOnList('62026f24210e8d7b341d9701');
   if (!MasterListPromise.length) { console.log('\x1b[36m%s\x1b[0m', "[Programme]: No ongoing work in Programme Masterlist's [In Progress]. No update needed."); return; }
-  MasterListPromise.forEach(async function (mCard) {
+  for (var mCard of MasterListPromise) {
     // Each Card in Masterlist's [In Progress]
     var checklistPromise = await _trello.getChecklistsOnCard(mCard.id);
     if (!checklistPromise.length) { return; }
-    checklistPromise.forEach(check => {
+    for (var check of checklistPromise) {
       // Each checklist in each card
       if (!check.checkItems.length) { return; }
       // Each check Item in checklist
-      check.checkItems.forEach(checkItem => {
+      for (var checkItem of check.checkItems) {
         // console.log(JSON.stringify(`${mCard.name} > ${checkItem.name} > ${checkItem.state}`));
         if (checkItem.state == 'complete') return;
         // console.log(`${doneUrls.includes(checkItems.name)}\n${doneUrls}\n${checkItems.name}`);
@@ -66,38 +66,32 @@ async function checkSermonNsingspiration(_trello, _key, _token, _doneUrls) {
         if (_doneUrls.includes(checkItem.name)) {
           tickCheckItem(mCard, check.id, checkItem.id, _key, _token);
         }
-      });
-    });
-  });
+      };
+    };
+  };
 }
 
 async function checkIntroNOutro(_trello, _key, _token, _attachments, _cardName) {
   // Programme Masterlist's [In Progress]
   var MasterListPromise = await _trello.getCardsOnList('62026f24210e8d7b341d9701');
   if (!MasterListPromise.length) { console.log('\x1b[36m%s\x1b[0m', "[Programme]: No ongoing work in Programme Masterlist's [In Progress]. No update needed."); return; }
-  MasterListPromise.forEach(async function (mCard) {
+  for (var mCard of MasterListPromise) {
     // Each Card in Masterlist's [In Progress]
     var checklistPromise = await _trello.getChecklistsOnCard(mCard.id);
     if (!checklistPromise.length) { return; }
     // Each checklist in each card
-    checklistPromise.forEach(check => {
+    for (var check of checklistPromise) {
       if (!check.checkItems.length) { return; }
       // Each check Item in checklist
       var completedCheckitems = [];
       check.checkItems.forEach(checkItem => { checkItem.state == "complete" ? completedCheckitems.push(checkItem.name) : null; });
-      check.checkItems.forEach(checkItem => {
+      for (var checkItem of check.checkItems) {
         // If the shortUrl of the done Card found, find Intro n Outro checkItem in the checklist and tick it
         if (Object.keys(_attachments).includes(checkItem.name)) {
           var foundIO = {};
           check.checkItems.forEach(findIO => { foundIO[findIO.name] = findIO.id; })
-
-          // console.log("-------------------------");
-          // console.log(JSON.stringify(_attachments, null, 4));
-          // console.log("-------------------------");
-          // console.log(JSON.stringify(completedCheckitems, null, 4));
-
-          for (var shortUrl in _attachments) {
-            _attachments[shortUrl].forEach(async function (attached) {
+          for (var shortUrl of _attachments) {
+            for (var attached of _attachments[shortUrl]) {
               if (attached.fileName.match(/intro/) && !completedCheckitems.includes("Intro")) {
                 // console.log('\x1b[33m%s\x1b[0m', `[Testing]: mCard=${mCard}, check=${check}, mCard=${mCard}, mCard=${mCard}, mCard=${mCard}, mCard=${mCard},`)
                 tickCheckItem(mCard, check.id, foundIO["Intro"], _key, _token);
@@ -105,12 +99,12 @@ async function checkIntroNOutro(_trello, _key, _token, _attachments, _cardName) 
               if (attached.fileName.match(/outro/) && !completedCheckitems.includes("Outro")) {
                 tickCheckItem(mCard, check.id, foundIO["Outro"], _key, _token);
               }
-            });
+            };
           };
         }
-      });
-    });
-  });
+      };
+    };
+  };
 }
 
 function simplifyOutput(_text) {

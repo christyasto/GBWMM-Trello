@@ -17,7 +17,7 @@ module.exports = {
         singCardPromise.forEach(singCard => { !headerCards.includes(singCard.id) ? allCards.push(singCard) : null; });
         sermonCardPromise.forEach(sermonCard => { !headerCards.includes(sermonCard.id) ? allCards.push(sermonCard) : null; });
         if (!allCards.length) { console.log('\x1b[33m%s\x1b[0m', `[Automation]: no new cards found, no updates done...`); return; }
-        allCards.forEach(function (card) { moveCard(card, key, token); });
+        for (var card of allCards) { moveCard(card, key, token); };
     }
 }
 
