@@ -2,8 +2,9 @@
 Trello Automation for GBWMM Youth Programme.
 
 #### **Notes:**
-- [Documentation here](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) if you want to create non-standard functions from the Rest API
-- Since most of the functions are async, try to put [source] in your logging for easier debugging. (check one of the functions' log triggers)
+- [Documentation here](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) if you want to create non-standard functions from the Rest API.
+- DO NOT use forEach for async functions, the order will go haywire according to [this guy](https://gist.github.com/joeytwiddle/37d2085425c049629b80956d3c618971).
+- Since most of the functions are async, try to put [source] in your logging for easier debugging. (check one of the functions' log triggers).
 
 ### **MasterChecklist.update** : 
 	- Read if there are any cards in Tech Team's [Done]
