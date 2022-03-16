@@ -1,4 +1,5 @@
 const TelegramBot = require('node-telegram-bot-api');
+const main = require('./main.js')
 const fs = require('fs')
 var secrets = JSON.parse(fs.readFileSync('secrets.json', 'utf8'));
 
@@ -21,7 +22,6 @@ bot.onText(/\/register/, (msg, match) => {
     "What is the password to be authenticated?",
     { reply_markup: JSON.stringify({ force_reply: true }) }
   ).then(sentMessage => {
-    console.log(sentMessage)
     bot.onReplyToMessage(sentMessage.chat.id, sentMessage.message_id, reply => {
       if (reply.text === secrets.auth_password) {
         add_user_to_auth_list(sentMessage)
@@ -30,6 +30,19 @@ bot.onText(/\/register/, (msg, match) => {
       }
     })
   });
+});
+
+bot.onText(/\/list/, (msg, match) => {
+  // 'msg' is the received Message from Telegram
+  const chatId = msg.chat.id;
+  var trello_functions_list = main.get_functions_list()
+  for (const function_object of trello_functions_list) {
+    // send back the name of the functions available
+    bot.sendMessage(
+      chatId,
+      function_object.name
+    );
+  }
 });
 
 
@@ -67,3 +80,11 @@ function add_user_to_auth_list(message_info) {
     bot.sendMessage(message_info.chat.id, `Added you to the authenticated chat list`)
   }
 }
+
+async function run_telebot() {
+  while (true) {
+    await main.run(1000);
+  }
+}
+
+run_telebot()
