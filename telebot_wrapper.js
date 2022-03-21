@@ -32,15 +32,19 @@ bot.onText(/\/register/, (msg, match) => {
   });
 });
 
-bot.onText(/\/list/, (msg, match) => {
+bot.onText(/\/list/, async (msg, match) => {
   // 'msg' is the received Message from Telegram
   const chatId = msg.chat.id;
+  await bot.sendMessage(
+    chatId,
+    "These are the available automated trello functions available: "
+  );
   var trello_functions_list = main.get_functions_list()
-  for (const function_object of trello_functions_list) {
+  for (const [index, function_object] of trello_functions_list.entries()) {
     // send back the name of the functions available
-    bot.sendMessage(
+    await bot.sendMessage(
       chatId,
-      function_object.name
+      `${index+1}. ` + function_object.name
     );
   }
 });
