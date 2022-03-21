@@ -35,17 +35,21 @@ bot.onText(/\/register/, (msg, match) => {
 bot.onText(/\/list/, async (msg, match) => {
   // 'msg' is the received Message from Telegram
   const chatId = msg.chat.id;
-  await bot.sendMessage(
-    chatId,
-    "These are the available automated trello functions available: "
-  );
-  var trello_functions_list = main.get_functions_list()
-  for (const [index, function_object] of trello_functions_list.entries()) {
-    // send back the name of the functions available
+
+  // Auth
+  if(authentication_command_check(msg)) {
     await bot.sendMessage(
       chatId,
-      `${index+1}. ` + function_object.name
+      "These are the available automated trello functions available: "
     );
+    var trello_functions_list = main.get_functions_list()
+    for (const [index, function_object] of trello_functions_list.entries()) {
+      // send back the name of the functions available
+      await bot.sendMessage(
+        chatId,
+        `${index+1}. ` + function_object.name
+      );
+    }
   }
 });
 
@@ -76,12 +80,25 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 // });
 
 function add_user_to_auth_list(message_info) {
-  if (Object.values(auth_users_chat_id).includes(message_info.chat.id)) {
+  if (is_user_authenticated(message_info)) {
     bot.sendMessage(message_info.chat.id, 'You are already authenticated.')
   } else {
     secrets.auth_users_chat_id[message_info.chat.username] = message_info.chat.id
     fs.writeFileSync('secrets.json', secrets)
     bot.sendMessage(message_info.chat.id, `Added you to the authenticated chat list`)
+  }
+}
+
+function is_user_authenticated(message_info) {
+  return Object.values(auth_users_chat_id).includes(message_info.chat.id)
+}
+
+function authentication_command_check(message_info) {
+  if (!is_user_authenticated(message_info)) {
+    bot.sendMessage(message_info.chat.id, 'You are not authenticated to execute this command')
+    return false
+  } else {
+    return true
   }
 }
 
