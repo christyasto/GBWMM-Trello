@@ -1,30 +1,28 @@
+const { lowerCase } = require("lodash");
+
 module.exports = {
   Update: async function (key, token) {
     var Trello = require("trello");
     var trello = new Trello(key, token);
+    var doneUrls = [], IOcardnames = [];
+
+    console.log('\x1b[36m%s\x1b[0m', "[Programme]: Checking for Programme updates...");
 
     // [Done] List from Tech Team board
     var doneListPromise = await trello.getCardsOnList('61f2c997e9218c1221b57024');
-    if (!doneListPromise.length) { console.log('\x1b[36m%s\x1b[0m', "[Programme]: Tech Team's [Done] is empty. No update needed."); return; }
-    var doneUrls = [];
-    // doneUrls contain the list of short Url from Tech Team's [Done]
-    console.log('\x1b[36m%s\x1b[0m', "[Programme]: Checking for Programme updates...");
-    var IOcounter = 0;
-    for (var card of doneListPromise) {
-      var attachments = {};
-      doneUrls.push(card.shortUrl);
-      // check for attachments in the card if they contain intro / outro
-      var attachPromise = await trello.getAttachmentsOnCard(card.id);
-      if (attachPromise.length) {
-        attachments[card.shortUrl] = attachPromise;
-        // console.log(JSON.stringify(attachments, null, 4));
-        await checkIntroNOutro(trello, key, token, attachments, card.name).then(counter => IOcounter += counter);
-      }
-    };
-    checkSermonNsingspiration(trello, key, token, doneUrls);
-    // setTimeout(() => console.log('\x1b[36m%s\x1b[0m', "[Programme]: Checking done... Changes made are before this line.")
-    //   , 8 * 1000);
-    !IOcounter ? console.log('\x1b[36m%s\x1b[0m', "[Programme]: No matching Intro/Outro attachments detected... No updates were done.") : null;
+    if (!doneListPromise.length) console.log('\x1b[36m%s\x1b[0m', "[Programme]: Tech Team's [Done] is empty. No update needed.");
+    else {
+      for (var card of doneListPromise) { doneUrls.push(card.shortUrl); }
+      // checkSermonNsingspiration(trello, key, token, IOcardnames);
+    }
+
+    var IOPromise = await trello.getCardsOnList('61f9f995a3be2b36d01f83fe');
+    if (!IOPromise.length) console.log('\x1b[36m%s\x1b[0m', "[Programme]: No Intro / Outro Card found. No update needed.");
+    else {
+      for (var card of IOPromise) { card.name.match(/Intro & Outro/) ? IOcardnames.push(card.name.match(/\((.*?)\)/)[1]) : null; }
+      // console.log(JSON.stringify(IOcardnames, null, 4));
+      checkIntroNOutro(trello, key, token, IOcardnames);
+    }
   }
 }
 
@@ -67,7 +65,6 @@ async function checkSermonNsingspiration(_trello, _key, _token, _doneUrls) {
         // console.log(JSON.stringify(`${mCard.name} > ${checkItem.name} > ${checkItem.state}`));
         if (checkItem.state == 'complete') return;
         // console.log(`${doneUrls.includes(checkItems.name)}\n${doneUrls}\n${checkItems.name}`);
-        // PUT /1/cards/{idCard}/checklist/{idChecklist}/checkItem/{idCheckItem}/state
         if (_doneUrls.includes(checkItem.name)) {
           tickCheckItem(mCard, check.id, checkItem.id, _key, _token);
           counter++;
@@ -78,43 +75,37 @@ async function checkSermonNsingspiration(_trello, _key, _token, _doneUrls) {
   !counter ? console.log('\x1b[36m%s\x1b[0m', "[Programme]: No matching cards... No updates were done.") : null;
 }
 
-async function checkIntroNOutro(_trello, _key, _token, _attachments, _cardName) {
-  // Programme Masterlist's [In Progress]
+async function checkIntroNOutro(_trello, _key, _token, _IOcardnames) {
   var counter = 0;
+  var _IOList = [];
+
+  for (var IOname of _IOcardnames) {
+    for (var i = 1; i < parseInt(IOname.match(/#.\-(.+)/)[1]) + 1; i++) _IOList.push(lowerCase(`${IOname.match(/(.*?) #/)[1]} #${i}`));
+  }
+  // Programme Masterlist's [In Progress]
   var MasterListPromise = await _trello.getCardsOnList('62026f24210e8d7b341d9701');
   if (!MasterListPromise.length) { console.log('\x1b[36m%s\x1b[0m', "[Programme]: No ongoing work in Programme Masterlist's [In Progress]. No update needed."); return; }
   for (var mCard of MasterListPromise) {
     // Each Card in Masterlist's [In Progress]
+    if (!_IOList.includes(lowerCase(mCard.name))) continue;
     var checklistPromise = await _trello.getChecklistsOnCard(mCard.id);
-    if (!checklistPromise.length) { return 0; }
-    // Each checklist in each card
+    if (!checklistPromise.length) { continue; }
     for (var check of checklistPromise) {
-      if (!check.checkItems.length) { return 0; }
+      // Each checklist in each card
+      if (!check.checkItems.length) { continue; }
       // Each check Item in checklist
-      var completedCheckitems = [];
-      check.checkItems.forEach(checkItem => { checkItem.state == "complete" ? completedCheckitems.push(checkItem.name) : null; });
       for (var checkItem of check.checkItems) {
-        // If the shortUrl of the done Card found, find Intro n Outro checkItem in the checklist and tick it
-        if (Object.keys(_attachments).includes(checkItem.name)) {
-          var foundIO = {};
-          check.checkItems.forEach(findIO => { foundIO[findIO.name] = findIO.id; })
-          for (var shortUrl of Object.keys(_attachments)) {
-            for (var attached of _attachments[shortUrl]) {
-              if (attached.fileName.match(/intro/) && !completedCheckitems.includes("Intro")) {
-                tickCheckItem(mCard, check.id, foundIO["Intro"], _key, _token);
-                counter++;
-              }
-              if (attached.fileName.match(/outro/) && !completedCheckitems.includes("Outro")) {
-                tickCheckItem(mCard, check.id, foundIO["Outro"], _key, _token);
-                counter++;
-              }
-            };
-          };
+        // console.log(JSON.stringify(`${mCard.name} > ${checkItem.name} > ${checkItem.state}`));
+        if (checkItem.state == 'complete') continue;
+        // console.log(`${doneUrls.includes(checkItems.name)}\n${doneUrls}\n${checkItems.name}`);
+        if (checkItem.name == 'Intro' || checkItem.name == 'Outro') {
+          tickCheckItem(mCard, check.id, checkItem.id, _key, _token);
+          counter++;
         }
       };
     };
   };
-  return counter;
+  !counter ? console.log('\x1b[36m%s\x1b[0m', "[Programme]: No new Intro & Outro input... No updates were done.") : null;
 }
 
 function simplifyOutput(_text) {

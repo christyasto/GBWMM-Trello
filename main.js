@@ -32,6 +32,6 @@ masterCheckList.Update(key, token);
 // // Check for Singspiration/Sermon Team's milestone and duplicate the card to Tech Team and keep them updated.
 // cardDuplication.Update(key, token);
 // updateDuplicated.Update(key, token);
-moveCard.Update(key, token);
+// moveCard.Update(key, token);
 
 // }, 10 * 60 * 1000); // 10 minutes
